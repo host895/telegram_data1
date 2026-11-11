@@ -63,11 +63,12 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
 <div class="wrap">
 
 <header>
-  <span class="demo-tag">SECURE TERMINAL v3.7</span>
+  <span class="demo-tag">SECURE TERMINAL v3.8</span>
   <h1>Nexus Lookup</h1>
   <p>محرك استعلامات الأمان والبحث المتقدم عبر المعرفات أو أسماء المستخدمين في قاعدة البيانات.</p>
 </header>
 
+<!-- الإعلان العلوي 728x90 -->
 <div class="ad-container">
   <script>
     atOptions = {
@@ -91,15 +92,16 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
   <h2>استعلام بيانات المستخدم</h2>
   
   <div class="input-group">
-    <label for="userIdInput">User ID (اختياري لو بتكتب اليوزر)</label>
+    <label for="userIdInput">User ID</label>
     <input id="userIdInput" inputmode="numeric" placeholder="مثال: 111331762">
   </div>
 
   <div class="input-group">
-    <label for="usernameInput">Username (اختياري لو بتكتب الأيدي)</label>
-    <input id="usernameInput" placeholder="مثال: username">
+    <label for="usernameInput">Username</label>
+    <input id="usernameInput" placeholder="مثال: continentalway1">
   </div>
 
+  <!-- إعلان 300x250 فوق زر البحث -->
   <div class="ad-container" style="margin: 14px 0 4px 0;">
     <script>
       atOptions = {
@@ -117,8 +119,10 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
   <p class="note" id="statusNote">جاري تحميل وتهيئة قاعدة البيانات...</p>
 </section>
 
+<!-- نتائج البحث -->
 <div id="output"></div>
 
+<!-- إعلان وسط الصفحة 300x250 -->
 <div class="ad-container" style="margin: 20px 0;">
   <script>
     atOptions = {
@@ -137,6 +141,7 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
   <div class="sync" id="logSync"><i>●</i> جاري الاتصال بالمستودع...</div>
 </section>
 
+<!-- الإعلانات الثلاثة السفلية -->
 <div class="ad-container">
   <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
   <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
@@ -189,14 +194,17 @@ function updateStats(){
 function parseLine(line){
   const p = line.split("|");
   if(p.length < 7) return null;
-  const id = p[0].trim();
+  
+  // بناءً على هيكلة ملفاتك:
+  // [0] Index, [1] First Name, [2] Last Name, [3] Phone, [4] User ID, [5] Username, [6] Was Online
+  const id = p[4].trim(); 
   if(!/^\d+$/.test(id)) return null;
+
   return {
     id,
     firstName: (p[1] || "").trim(),
     lastName: (p[2] || "").trim(),
     phone: (p[3] || "").trim(),
-    accessHash: (p[4] || "").trim(),
     username: (p[5] || "").trim().toLowerCase(),
     originalUsername: (p[5] || "").trim(),
     wasOnline: (p[6] || "").trim()
@@ -297,6 +305,7 @@ function executeSearch(){
 
   const fullName = [record.firstName, record.lastName].filter(Boolean).join(" ");
   
+  // إضافة علامة + قبل رقم الهاتف لو مش موجودة
   let formattedPhone = "غير متوفر";
   if(record.phone){
     formattedPhone = record.phone.startsWith('+') ? record.phone : '+' + record.phone;
@@ -309,7 +318,6 @@ function executeSearch(){
     <div class="row"><span class="k">Full Name</span><span class="v">${fullName || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Username</span><span class="v">${record.originalUsername ? "@" + record.originalUsername : "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Phone Number</span><span class="v">${formattedPhone}<button class="copy" type="button">نسخ</button></span></div>
-    <div class="row"><span class="k">Access Hash</span><span class="v">${record.accessHash || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Last Online</span><span class="v">${formatDate(record.wasOnline)}<button class="copy" type="button">نسخ</button></span></div>
   </section>`;
 
