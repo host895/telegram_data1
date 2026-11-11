@@ -289,7 +289,7 @@ function executeSearch(){
     <div class="row"><span class="k">User ID</span><span class="v">${record.id}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Full Name</span><span class="v">${fullName || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Username</span><span class="v">${record.username ? "@" + record.username : "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
-    <div class="row"><span class="k">Phone Number</span><span class="v">${record.phone || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Phone Number</span><span class="v">${record.phone ? (record.phone.startsWith('+') ? record.phone : '+' + record.phone) : "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Access Hash</span><span class="v">${record.accessHash || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Last Online</span><span class="v">${formatDate(record.wasOnline)}<button class="copy" type="button">نسخ</button></span></div>
   </section>`;
