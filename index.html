@@ -1,401 +1,408 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة استعلام بيانات المستخدمين</title>
-    
-    <!-- خطوط جوجل العصرية -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- سكريبتات إعلانات Anti-Adblock (الرأس) -->
-    <script data-cfasync="false" src="https://bauval.org/14/d5b53f63b4cb271066fa44c8a4329012"></script>
-    <script data-cfasync="false" src="https://abscloud.org/1/3565e08c94b0fc2c6fd90a0c97183c9d"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nexus Terminal | Telegram Intelligence</title>
+<!-- خطوط عصرية حديثة -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-base: #030712;
+    --bg-card: rgba(17, 24, 39, 0.7);
+    --border-glow: rgba(56, 189, 248, 0.15);
+    --accent-primary: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.3);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --success: #34d399;
+    --danger: #f87171;
+}
 
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --bg-main: #f8fafc;
-            --surface: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --radius: 16px;
-        }
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    padding: 24px;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+}
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+.container{max-width:850px;margin:auto}
 
-        .wrapper {
-            width: 100%;
-            max-width: 680px;
-            padding: 24px;
-            box-sizing: border-box;
-        }
+/* الهيدر الاحترافي */
+.header{text-align:center;padding:30px 10px 20px}
+.badge{
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent-primary);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+.header h1{font-size:32px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;color:#fff}
+.header p{color:var(--text-muted);font-size:15px}
 
-        /* حاوية الإعلانات المحترفة */
-        .ad-box {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 16px 0;
-            background: #ffffff;
-            border: 1px dashed var(--border);
-            border-radius: 12px;
-            padding: 8px;
-            box-sizing: border-box;
-            min-height: 60px;
-        }
+/* إعلانات البانر العلوية */
+.ad-top-banner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    border-radius: 14px;
+    padding: 10px;
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+}
 
-        .hero-section {
-            text-align: center;
-            margin: 30px 0 20px;
-        }
+/* بطاقات الإحصائيات (نمط التداول) */
+.stats{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:14px;margin-bottom:24px
+}
+.stat{
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    backdrop-filter: blur(12px);
+    padding: 20px 14px;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.stat:hover{
+    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, 0.4);
+}
+.stat strong{display:block;color:var(--accent-primary);font-size:24px;font-family:'JetBrains Mono', monospace;font-weight:700}
+.stat span{font-size:13px;color:var(--text-muted);margin-top:4px;display:block}
 
-        .hero-section h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
+/* اللوحة الرئيسية للبحث */
+.panel{
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    backdrop-filter: blur(16px);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+}
+.section-title{
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title::before{
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 18px;
+    background: var(--accent-primary);
+    border-radius: 3px;
+}
 
-        .hero-section p {
-            font-size: 15px;
-            color: var(--text-muted);
-            margin: 0;
-        }
+input{
+    width:100%;padding:16px 18px;border-radius:12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(3, 7, 18, 0.6);
+    color:white;font-size:16px;outline:none;
+    font-family:'JetBrains Mono', monospace;
+    transition: all 0.2s ease;
+    direction:ltr;text-align:left
+}
+input:focus{
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+}
 
-        .search-card {
-            background: var(--surface);
-            padding: 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 24px;
-        }
+button{
+    width:100%;padding:16px;margin-top:14px;
+    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+    color:white;border:0;
+    border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+button:hover{
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+}
+button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 
-        .search-group {
-            display: flex;
-            gap: 12px;
-        }
+.status{font-size:13px;color:var(--text-muted);margin-top:12px;font-family:'JetBrains Mono', monospace}
 
-        input[type="text"] {
-            flex: 1;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background-color: #f8fafc;
-            color: var(--text-main);
-            font-size: 16px;
-            outline: none;
-            transition: all 0.2s ease;
-        }
+/* نتائج البحث العصرية */
+.result{margin-top:0}
+.field{
+    display:flex;justify-content:space-between;
+    align-items: center;
+    gap:10px;padding:14px 16px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+.field span:first-child{color:var(--text-muted);font-size:13px;font-weight:600}
+.field span:last-child{
+    text-align:left;direction:ltr;overflow-wrap:anywhere;
+    color: #fff;font-family:'JetBrains Mono', monospace;font-size:14px;
+}
 
-        input[type="text"]:focus {
-            border-color: var(--primary);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
+.success{color:var(--success)}
+.error{color:var(--danger)}
 
-        button {
-            padding: 14px 28px;
-            border-radius: 12px;
-            border: none;
-            background-color: var(--primary);
-            color: #fff;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-        }
+/* حاوية الإعلانات الطويلة في الأسفل */
+.ad-bottom-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 30px;
+}
+.ad-box-long {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-glow);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+}
 
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .status-msg {
-            margin-top: 14px;
-            font-size: 14px;
-            color: var(--text-muted);
-            text-align: center;
-            font-weight: 500;
-        }
-
-        /* بطاقة النتائج الحديثة */
-        .results-container {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .results-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--primary);
-            border-bottom: 2px solid var(--bg-main);
-            padding-bottom: 10px;
-        }
-
-        .data-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-
-        .data-label {
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .data-val {
-            color: var(--text-main);
-            font-size: 15px;
-            font-weight: 600;
-            word-break: break-all;
-            text-align: left;
-        }
-    </style>
+@media(max-width:500px){
+ body{padding:12px}
+ .field{font-size:12px}
+ .stats{gap:8px}
+ .stat strong{font-size:18px}
+}
+</style>
 </head>
 <body>
+<div class="container">
 
-    <div class="wrapper">
-        
-        <!-- إعلان رأس الصفحة الأول -->
-        <div class="ad-box">
-            <script>  
-              atOptions = {  
-                'key' : '9221121f25f3e38fce00544a6e00a8e5',  
-                'format' : 'iframe',  
-                'height' : 50,  
-                'width' : 320,  
-                'params' : {}  
-              };  
-            </script>
-            <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
-        </div>
+<!-- إعلان البانر العلوي -->
+<div class="ad-top-banner">
+    <script>  
+      atOptions = {  
+        'key' : '9221121f25f3e38fce00544a6e00a8e5',  
+        'format' : 'iframe',  
+        'height' : 50,  
+        'width' : 320,  
+        'params' : {}  
+      };  
+    </script>  
+    <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
+</div>
 
-        <div class="hero-section">
-            <h1>استعلام البيانات</h1>
-            <p>أدخل معرف المستخدم (User ID) للبحث الفوري واستعراض كافة البيانات المتاحة</p>
-        </div>
+<div class="header">
+    <span class="badge">SECURE DATA TERMINAL</span>
+    <h1>Telegram Intelligence</h1>
+    <p>محرك استعلامات الأمان والبحث المتقدم عبر معرفات المستخدمين</p>
+</div>
 
-        <!-- إعلان 2 -->
-        <div class="ad-box">
-            <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
-            <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
-        </div>
+<!-- لوحة المؤشرات والإحصائيات -->
+<div class="stats">
+ <div class="stat">
+  <strong id="files">0/100</strong>
+  <span>الملفات المفهرسة</span>
+ </div>
+ <div class="stat">
+  <strong id="records">0</strong>
+  <span>إجمالي السجلات</span>
+ </div>
+ <div class="stat">
+  <strong id="matches">0</strong>
+  <span>مطابقات البحث</span>
+ </div>
+</div>
 
-        <!-- صندوق البحث -->
-        <div class="search-card">
-            <div class="search-group">
-                <input type="text" id="userIdInput" placeholder="أدخل User ID (مثال: 111331762)">
-                <button onclick="handleSearchClick()">بحث</button>
-            </div>
-            <div id="statusText" class="status-msg">النظام جاهز للبحث...</div>
-        </div>
+<!-- لوحة إدخال البيانات -->
+<div class="panel">
+<h3 class="section-title">بحث استعلامي دقيق</h3>
+<input id="userId" type="text" inputmode="numeric" placeholder="أدخل User ID هنا (مثال: 111331762)...">
 
-        <!-- إعلان 3 (بين البحث وظهر النتائج) -->
-        <div class="ad-box">
-            <script>  
-              atOptions = {  
-                'key' : '9221121f25f3e38fce00544a6e00a8e5',  
-                'format' : 'iframe',  
-                'height' : 50,  
-                'width' : 320,  
-                'params' : {}  
-              };  
-            </script>
-            <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
-        </div>
+<button id="searchBtn" onclick="searchUser()">بدء الاستعلام</button>
+<div id="status" class="status">جاري تهيئة الاتصال بقاعدة البيانات...</div>
+</div>
 
-        <!-- قسم النتائج -->
-        <div id="resultCard" class="results-container">
-            <div class="results-title">بيانات المستخدم المطابق</div>
-            <div class="data-grid">
-                <div class="data-row">
-                    <span class="data-label">الرقم التسلسلي (ID)</span>
-                    <span id="resIndex" class="data-val">-</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">الاسم الأول</span>
-                    <span id="resFirstName" class="data-val">-</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">الاسم الأخير</span>
-                    <span id="resLastName" class="data-val">-</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">رقم الهاتف</span>
-                    <span id="resPhone" class="data-val">-</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">معرف المستخدم (User ID)</span>
-                    <span id="resUserId" class="data-val">-</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">اسم المستخدم (Username)</span>
-                    <span id="resUsername" class="data-val">-</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">آخر ظهور (Was Online)</span>
-                    <span id="resOnline" class="data-val">-</span>
-                </div>
-            </div>
-        </div>
+<div id="output"></div>
 
-        <!-- إعلانات أسفل الصفحة المتعددة -->
-        <div class="ad-box">
-            <script>  
-              atOptions = {  
-                'key' : '9221121f25f3e38fce00544a6e00a8e5',  
-                'format' : 'iframe',  
-                'height' : 50,  
-                'width' : 320,  
-                'params' : {}  
-              };  
-            </script>
-            <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
-        </div>
+<!-- حالة التحميل واللوج -->
+<div class="panel">
+<h3 class="section-title">حالة المزامنة والملفات</h3>
+<div id="log" class="status">في انتظار بدء المزامنة...</div>
+</div>
 
-        <div class="ad-box">
-            <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
-            <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
-        </div>
-
+<!-- الإعلانات الطويلة في الأسفل تماماً -->
+<div class="ad-bottom-container">
+    <div class="ad-box-long">
+        <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
+        <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
     </div>
+    
+    <div class="ad-box-long">
+        <script data-cfasync="false" src="https://bauval.org/14/d5b53f63b4cb271066fa44c8a4329012"></script>
+    </div>
+    
+    <div class="ad-box-long">
+        <script data-cfasync="false" src="https://abscloud.org/1/3565e08c94b0fc2c6fd90a0c97183c9d"></script>
+    </div>
+</div>
 
-    <script>
-        const baseUrl = 'https://raw.githubusercontent.com/host895/telegram_data1/main/data/';
-        const smartLink = 'https://araplhn.org/4/9239b31df6c443e95bbb60160f372a35';
-        
-        let searchClickCount = 0;
+</div>
 
-        function handleSearchClick() {
-            searchClickCount++;
+<script>
+const BASE = "https://raw.githubusercontent.com/host895/telegram_data1/main/data/";
 
-            // فتح الـ Smartlink أول ضغطتين، ثم البحث في الثالثة
-            if (searchClickCount === 1 || searchClickCount === 2) {
-                window.open(smartLink, '_blank');
-                document.getElementById('statusText').innerText = `يرجى تخطي الإعلان للمتابعة (المحاولة ${searchClickCount} من 2)...`;
-                return;
-            }
+let database = new Map();
+let loaded = 0;
+let total = 0;
 
-            executeSearch();
-        }
+const $ = id => document.getElementById(id);
 
-        async function executeSearch() {
-            const query = document.getElementById('userIdInput').value.trim();
-            const statusText = document.getElementById('statusText');
-            const resultCard = document.getElementById('resultCard');
+function updateStats(){
+ $("files").textContent = loaded + "/100";
+ $("records").textContent = total.toLocaleString();
+}
 
-            if (!query) {
-                statusText.innerText = 'الرجاء إدخال User ID للبحث.';
-                return;
-            }
+function parseLine(line){
+ const p = line.split("|");
+ if(p.length < 7) return null;
 
-            statusText.innerText = 'جاري البحث عبر الملفات...';
-            resultCard.style.display = 'none';
+ const id = p[0].trim();
+ if(!/^\d+$/.test(id)) return null;
 
-            let found = false;
+ return {
+  id,
+  firstName:(p[1] || "").trim(),
+  lastName:(p[2] || "").trim(),
+  phone:(p[3] || "").trim(),
+  accessHash:(p[4] || "").trim(),
+  username:(p[5] || "").trim(),
+  wasOnline:(p[6] || "").trim()
+ };
+}
 
-            // البحث التتابعي من part_1.txt إلى part_100.txt
-            for (let i = 1; i <= 100; i++) {
-                const fileName = `part_${i}.txt`;
-                const fileUrl = `${baseUrl}${fileName}`;
+async function loadFile(number){
+ const url = BASE + "part_" + number + ".txt";
+ try{
+  const response = await fetch(url);
+  if(!response.ok) return false;
+  const content = await response.text();
+  const lines = content.split(/\r?\n/);
+  let count = 0;
 
-                try {
-                    statusText.innerText = `جاري البحث في الملف (${i}/100)...`;
-                    const response = await fetch(fileUrl);
-                    
-                    if (!response.ok) continue;
+  for(const line of lines){
+   const record = parseLine(line);
+   if(!record) continue;
+   database.set(record.id, record);
+   count++;
+  }
 
-                    const text = await response.text();
-                    const lines = text.split('\n');
+  total += count;
+  loaded++;
+  return true;
+ }catch(error){
+  return false;
+ }
+}
 
-                    for (let line of lines) {
-                        if (!line.trim()) continue;
+async function loadDatabase(){
+ $("status").textContent = "جاري جلب الملفات وتحليل السجلات...";
+ const log = [];
 
-                        const parts = line.split('|');
+ for(let start = 1; start <= 100; start += 5){
+  const batch = [];
+  for(let i = start; i < Math.min(start + 5, 101); i++){
+   batch.push(loadFile(i));
+  }
 
-                        // بنية السطر: 
-                        // [0] Index | [1] First | [2] Last | [3] Phone | [4] User ID | [5] Username | [6] Online
-                        // التحقق الدقيق من حقل User ID (العنصر الخامس / Index 4)
-                        if (parts.length >= 5 && parts[4].trim() === query) {
-                            displayResult(parts);
-                            statusText.innerText = `تم العثور على النتيجة بنجاح في ${fileName}!`;
-                            found = true;
-                            break; // الخروج من حلقة السطور داخلياً
-                        }
-                    }
+  const results = await Promise.all(batch);
+  results.forEach((ok, index)=>{
+   const n = start + index;
+   log.push(`part_${n}.txt: ` + (ok ? "متاح" : "غير متوفر"));
+  });
 
-                    if (found) {
-                        break; // الخروج التام من حلقة الملفات فوراً وعدم إكمال البحث بعد العثور على المطابقة
-                    }
+  updateStats();
+  $("log").textContent = log.slice(-10).join(" | ");
+  $("status").textContent = `تمت فهرسة ${Math.min(start + 4, 100)} من أصل 100 ملف`;
+ }
 
-                } catch (error) {
-                    console.error(`خطأ في قراءة ${fileName}:`, error);
-                }
-            }
+ $("status").innerHTML = '<span class="success">اكتملت فهرسة وتجهيز قاعدة البيانات بنجاح</span>';
+ $("searchBtn").disabled = false;
+ $("log").textContent = `اكتمل التحميل: ${loaded} ملف نشط في الذاكرة`;
+}
 
-            if (!found) {
-                statusText.innerText = 'لم يتم العثور على بيانات مطابقة لهذا الـ User ID.';
-            }
-        }
+function formatDate(value){
+ if(!value || !/^\d+$/.test(value)) return "غير متوفر";
+ const date = new Date(Number(value));
+ if(isNaN(date.getTime())) return "غير متوفر";
+ return date.toLocaleString("ar-EG");
+}
 
-        function displayResult(parts) {
-            document.getElementById('resIndex').innerText = parts[0] || 'غير متوفر';
-            document.getElementById('resFirstName').innerText = parts[1] || 'غير متوفر';
-            document.getElementById('resLastName').innerText = parts[2] || 'غير متوفر';
-            document.getElementById('resPhone').innerText = parts[3] || 'غير متوفر';
-            document.getElementById('resUserId').innerText = parts[4] || 'غير متوفر';
-            document.getElementById('resUsername').innerText = parts[5] || 'غير متوفر';
-            
-            let onlineVal = parts[6] ? parts[6].trim() : '';
-            if (onlineVal && !isNaN(onlineVal)) {
-                let date = new Date(parseInt(onlineVal));
-                onlineVal = date.toLocaleString('ar-EG');
-            }
-            document.getElementById('resOnline').innerText = onlineVal || 'غير متوفر';
+function field(label, value){
+ return `
+ <div class="field">
+  <span>${label}</span>
+  <span>${escapeHTML(value || "غير متوفر")}</span>
+ </div>`;
+}
 
-            document.getElementById('resultCard').style.display = 'block';
-        }
-    </script>
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g, c => ({
+  "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+ }[c]));
+}
+
+function searchUser(){
+ const id = $("userId").value.trim();
+ const output = $("output");
+
+ if(!/^\d+$/.test(id)){
+  output.innerHTML = '<div class="panel error" style="text-align:center;">يُرجى إدخال User ID صحيح يتكون من أرقام فقط</div>';
+  return;
+ }
+
+ const record = database.get(id);
+ $("matches").textContent = record ? "1" : "0";
+
+ if(!record){
+  output.innerHTML = '<div class="panel error" style="text-align:center;">لم يتم العثور على أي تطابق لهذا المعرف في قاعدة البيانات</div>';
+  return;
+ }
+
+ const name = [record.firstName, record.lastName].filter(Boolean).join(" ");
+
+ output.innerHTML = `
+ <div class="panel result">
+  <h3 class="section-title">نتائج البحث والاستعلام</h3>
+  ${field("User ID", record.id)}
+  ${field("Full Name", name)}
+  ${field("Username", record.username ? "@" + record.username : "غير متوفر")}
+  ${field("Phone Number", record.phone)}
+  ${field("Access Hash", record.accessHash)}
+  ${field("Last Online", formatDate(record.wasOnline))}
+ </div>`;
+}
+
+$("searchBtn").disabled = true;
+loadDatabase();
+</script>
 </body>
 </html>
