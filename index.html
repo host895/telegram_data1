@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Telegram Data Search</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090d16;color:#e8edf7;
+ font-family:Arial,sans-serif;padding:20px
+}
+.container{max-width:850px;margin:auto}
+.header{text-align:center;padding:30px 10px}
+.header h1{color:#42a5f5;font-size:27px}
+.header p{color:#8995aa}
+.panel{
+ background:#111a29;border:1px solid #26344a;
+ border-radius:14px;padding:20px;margin-bottom:18px
+}
+input{
+ width:100%;padding:15px;border-radius:9px;
+ border:1px solid #34445c;background:#0b1220;
+ color:white;font-size:17px;outline:none;
+ direction:ltr;text-align:left
+}
+button{
+ width:100%;padding:14px;margin-top:12px;
+ background:#1976d2;color:white;border:0;
+ border-radius:9px;font-size:16px;cursor:pointer
+}
+button:disabled{opacity:.5}
+.stats{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:10px;margin-bottom:18px
+}
+.stat{
+ background:#111a29;padding:16px 8px;
+ border-radius:10px;text-align:center
+}
+.stat strong{display:block;color:#42a5f5;font-size:22px}
+.stat span{font-size:12px;color:#9ba9bd}
+.status{font-size:13px;color:#aab8ca;margin-top:12px}
+.result{margin-top:15px}
+.field{
+ display:flex;justify-content:space-between;
+ gap:10px;padding:12px 5px;
+ border-bottom:1px solid #26344a
+}
+.field span:first-child{color:#899bb5}
+.field span:last-child{
+ text-align:left;direction:ltr;overflow-wrap:anywhere
+}
+.success{color:#4ade80}
+.error{color:#fb7185}
+.section-title{color:#42a5f5;margin-bottom:15px}
+@media(max-width:500px){
+ body{padding:12px}
+ .field{font-size:13px}
+ .stats{gap:6px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>Telegram Data Search</h1>
+<p>البحث في ملفات قاعدة البيانات باستخدام User ID</p>
+</div>
+
+<div class="stats">
+ <div class="stat">
+  <strong id="files">0/100</strong>
+  <span>الملفات المحملة</span>
+ </div>
+ <div class="stat">
+  <strong id="records">0</strong>
+  <span>إجمالي السجلات</span>
+ </div>
+ <div class="stat">
+  <strong id="matches">0</strong>
+  <span>نتائج البحث</span>
+ </div>
+</div>
+
+<div class="panel">
+<h3 class="section-title">البحث عن مستخدم</h3>
+<input id="userId" type="text" inputmode="numeric"
+placeholder="Enter User ID">
+
+<button id="searchBtn" onclick="searchUser()">بحث</button>
+<div id="status" class="status">جاري تجهيز قاعدة البيانات...</div>
+</div>
+
+<div id="output"></div>
+
+<div class="panel">
+<h3 class="section-title">حالة تحميل الملفات</h3>
+<div id="log" class="status">لم يبدأ التحميل</div>
+</div>
+
+</div>
+
+<script>
+const BASE =
+"https://raw.githubusercontent.com/host895/telegram_data1/main/data/";
+
+let database = new Map();
+let loaded = 0;
+let total = 0;
+
+const $ = id => document.getElementById(id);
+
+function updateStats(){
+ $("files").textContent = loaded + "/100";
+ $("records").textContent = total.toLocaleString();
+}
+
+function parseLine(line){
+ const p = line.split("|");
+
+ // ترتيب الأعمدة:
+ // User_ID | First Name | Last Name |
+ // Phone | Access Hash | Username | Was Online
+
+ if(p.length < 7) return null;
+
+ const id = p[0].trim();
+
+ if(!/^\d+$/.test(id)) return null;
+
+ return {
+  id,
+  firstName:(p[1] || "").trim(),
+  lastName:(p[2] || "").trim(),
+  phone:(p[3] || "").trim(),
+  accessHash:(p[4] || "").trim(),
+  username:(p[5] || "").trim(),
+  wasOnline:(p[6] || "").trim()
+ };
+}
+
+async function loadFile(number){
+ const url = BASE + "part_" + number + ".txt";
+
+ try{
+  const response = await fetch(url);
+
+  if(!response.ok) return false;
+
+  const content = await response.text();
+
+  const lines = content.split(/\r?\n/);
+
+  let count = 0;
+
+  for(const line of lines){
+   const record = parseLine(line);
+   if(!record) continue;
+
+   database.set(record.id,record);
+   count++;
+  }
+
+  total += count;
+  loaded++;
+
+  return true;
+
+ }catch(error){
+  return false;
+ }
+}
+
+async function loadDatabase(){
+ $("status").textContent = "جاري تحميل الملفات...";
+
+ const log = [];
+
+ // تحميل متوازٍ بعدد محدود لتقليل الضغط
+ for(let start = 1; start <= 100; start += 5){
+
+  const batch = [];
+
+  for(let i=start; i<Math.min(start+5,101); i++){
+   batch.push(loadFile(i));
+  }
+
+  const results = await Promise.all(batch);
+
+  results.forEach((ok,index)=>{
+   const n = start + index;
+   log.push("part_" + n + ".txt : " +
+    (ok ? "تم التحميل" : "غير موجود أو تعذر تحميله"));
+  });
+
+  updateStats();
+
+  $("log").textContent =
+   log.slice(-10).join(" | ");
+
+  $("status").textContent =
+   "تم فحص " + Math.min(start+4,100) +
+   " من 100 ملف";
+ }
+
+ $("status").innerHTML =
+  '<span class="success">اكتمل فحص الملفات المتاحة</span>';
+
+ $("searchBtn").disabled = false;
+ $("log").textContent =
+  loaded + " ملف تم تحميله بنجاح";
+
+}
+
+function formatDate(value){
+ if(!value || !/^\d+$/.test(value)) return "غير متوفر";
+
+ const date = new Date(Number(value));
+
+ if(isNaN(date.getTime())) return "غير متوفر";
+
+ return date.toLocaleString("ar-EG");
+}
+
+function field(label,value){
+ return `
+ <div class="field">
+  <span>${label}</span>
+  <span>${escapeHTML(value || "غير متوفر")}</span>
+ </div>`;
+}
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
+}
+
+function searchUser(){
+ const id = $("userId").value.trim();
+ const output = $("output");
+
+ if(!/^\d+$/.test(id)){
+  output.innerHTML =
+   '<div class="panel error">أدخل User ID صحيحًا</div>';
+  return;
+ }
+
+ const record = database.get(id);
+
+ $("matches").textContent = record ? "1" : "0";
+
+ if(!record){
+  output.innerHTML =
+   '<div class="panel error">لم يتم العثور على المستخدم في الملفات المحملة</div>';
+  return;
+ }
+
+ const name = [record.firstName,record.lastName]
+  .filter(Boolean).join(" ");
+
+ output.innerHTML = `
+ <div class="panel result">
+  <h3 class="section-title">نتيجة البحث</h3>
+  ${field("User ID",record.id)}
+  ${field("Full Name",name)}
+  ${field("Username",record.username)}
+  ${field("Phone","محمي")}
+  ${field("Access Hash","محمي")}
+  ${field("Was Online",formatDate(record.wasOnline))}
+ </div>`;
+}
+
+$("searchBtn").disabled = true;
+
+loadDatabase();
+</script>
+</body>
+</html>
