@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرك البحث في بيانات تليجرام</title>
+    <title>منصة استعلام بيانات المستخدمين</title>
     
-    <!-- سكريبتات إعلانات Popunder و Anti-Adblock (الرأس) -->
+    <!-- خطوط جوجل العصرية -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- سكريبتات إعلانات Anti-Adblock (الرأس) -->
     <script data-cfasync="false" src="https://bauval.org/14/d5b53f63b4cb271066fa44c8a4329012"></script>
     <script data-cfasync="false" src="https://abscloud.org/1/3565e08c94b0fc2c6fd90a0c97183c9d"></script>
 
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #38bdf8;
-            --text-color: #f8fafc;
-            --text-secondary: #94a3b8;
-            --border-color: #334155;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-main: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             margin: 0;
             padding: 0;
             display: flex;
@@ -31,128 +37,168 @@
             min-height: 100vh;
         }
 
-        .container {
+        .wrapper {
             width: 100%;
-            max-width: 800px;
-            padding: 20px;
+            max-width: 680px;
+            padding: 24px;
             box-sizing: border-box;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .header h1 {
-            color: var(--accent-color);
-            margin-bottom: 8px;
-        }
-
-        .search-box {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: #0f172a;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-color);
-        }
-
-        button {
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: none;
-            background-color: var(--accent-color);
-            color: #0f172a;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: #0284c7;
-            color: #fff;
-        }
-
-        .status {
-            margin-top: 10px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            text-align: center;
-        }
-
-        .result-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            margin-top: 20px;
-            display: none;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .result-value {
-            color: #fff;
-            font-weight: 600;
-            word-break: break-all;
-        }
-
-        /* شبكة الإعلانات الكثيفة */
-        .ad-banner-container {
+        /* حاوية الإعلانات المحترفة */
+        .ad-box {
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 15px 0;
-            overflow: hidden;
+            margin: 16px 0;
+            background: #ffffff;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            box-sizing: border-box;
             min-height: 60px;
-            background-color: rgba(255, 255, 255, 0.02);
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+
+        .hero-section h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .hero-section p {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .search-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .search-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background-color: #f8fafc;
+            color: var(--text-main);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        button {
+            padding: 14px 28px;
+            border-radius: 12px;
+            border: none;
+            background-color: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .status-msg {
+            margin-top: 14px;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* بطاقة النتائج الحديثة */
+        .results-container {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--bg-main);
+            padding-bottom: 10px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .data-label {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .data-val {
+            color: var(--text-main);
+            font-size: 15px;
+            font-weight: 600;
+            word-break: break-all;
+            text-align: left;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="wrapper">
         
-        <!-- إعلان أعلى الصفحة 1 -->
-        <div class="ad-banner-container">
+        <!-- إعلان رأس الصفحة الأول -->
+        <div class="ad-box">
             <script>  
               atOptions = {  
                 'key' : '9221121f25f3e38fce00544a6e00a8e5',  
@@ -165,27 +211,28 @@
             <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
         </div>
 
-        <div class="header">
-            <h1>محرك البحث في قاعدة البيانات</h1>
-            <p style="color: var(--text-secondary);">ادخل User ID للبحث عن البيانات الخاصة به</p>
+        <div class="hero-section">
+            <h1>استعلام البيانات</h1>
+            <p>أدخل معرف المستخدم (User ID) للبحث الفوري واستعراض كافة البيانات المتاحة</p>
         </div>
 
         <!-- إعلان 2 -->
-        <div class="ad-banner-container">
+        <div class="ad-box">
             <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
             <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
         </div>
 
-        <div class="search-box">
-            <div class="input-group">
-                <input type="text" id="userIdInput" placeholder="أدخل User ID هنا (مثال: 111331762)...">
+        <!-- صندوق البحث -->
+        <div class="search-card">
+            <div class="search-group">
+                <input type="text" id="userIdInput" placeholder="أدخل User ID (مثال: 111331762)">
                 <button onclick="handleSearchClick()">بحث</button>
             </div>
-            <div id="statusText" class="status">جاهز للبحث...</div>
+            <div id="statusText" class="status-msg">النظام جاهز للبحث...</div>
         </div>
 
-        <!-- إعلان 3 (بين البحث والنتائج) -->
-        <div class="ad-banner-container">
+        <!-- إعلان 3 (بين البحث وظهر النتائج) -->
+        <div class="ad-box">
             <script>  
               atOptions = {  
                 'key' : '9221121f25f3e38fce00544a6e00a8e5',  
@@ -198,39 +245,43 @@
             <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
         </div>
 
-        <div id="resultCard" class="result-card">
-            <div class="result-item">
-                <span class="result-label">الرقم التسلسلي (Index):</span>
-                <span id="resIndex" class="result-value">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">الاسم الأول:</span>
-                <span id="resFirstName" class="result-value">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">الاسم الأخير:</span>
-                <span id="resLastName" class="result-value">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">رقم الهاتف:</span>
-                <span id="resPhone" class="result-value">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">User ID:</span>
-                <span id="resUserId" class="result-value">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">اسم المستخدم (Username):</span>
-                <span id="resUsername" class="result-value">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">آخر ظهور (Was Online):</span>
-                <span id="resOnline" class="result-value">-</span>
+        <!-- قسم النتائج -->
+        <div id="resultCard" class="results-container">
+            <div class="results-title">بيانات المستخدم المطابق</div>
+            <div class="data-grid">
+                <div class="data-row">
+                    <span class="data-label">الرقم التسلسلي (ID)</span>
+                    <span id="resIndex" class="data-val">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">الاسم الأول</span>
+                    <span id="resFirstName" class="data-val">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">الاسم الأخير</span>
+                    <span id="resLastName" class="data-val">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">رقم الهاتف</span>
+                    <span id="resPhone" class="data-val">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">معرف المستخدم (User ID)</span>
+                    <span id="resUserId" class="data-val">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">اسم المستخدم (Username)</span>
+                    <span id="resUsername" class="data-val">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">آخر ظهور (Was Online)</span>
+                    <span id="resOnline" class="data-val">-</span>
+                </div>
             </div>
         </div>
 
-        <!-- إعلان أسفل الصفحة 4 -->
-        <div class="ad-banner-container">
+        <!-- إعلانات أسفل الصفحة المتعددة -->
+        <div class="ad-box">
             <script>  
               atOptions = {  
                 'key' : '9221121f25f3e38fce00544a6e00a8e5',  
@@ -243,8 +294,7 @@
             <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
         </div>
 
-        <!-- إعلان أسفل الصفحة 5 -->
-        <div class="ad-banner-container">
+        <div class="ad-box">
             <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
             <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
         </div>
@@ -252,7 +302,6 @@
     </div>
 
     <script>
-        // إعدادات المسار ورابط Smartlink
         const baseUrl = 'https://raw.githubusercontent.com/host895/telegram_data1/main/data/';
         const smartLink = 'https://araplhn.org/4/9239b31df6c443e95bbb60160f372a35';
         
@@ -261,14 +310,13 @@
         function handleSearchClick() {
             searchClickCount++;
 
-            // الضغطة الأولى والثانية تفتح رابط الإعلانات الذكي Smartlink
+            // فتح الـ Smartlink أول ضغطتين، ثم البحث في الثالثة
             if (searchClickCount === 1 || searchClickCount === 2) {
                 window.open(smartLink, '_blank');
-                document.getElementById('statusText').innerText = `يرجى إكمال الإعلان للبحث (المحاولة ${searchClickCount} من 2)...`;
+                document.getElementById('statusText').innerText = `يرجى تخطي الإعلان للمتابعة (المحاولة ${searchClickCount} من 2)...`;
                 return;
             }
 
-            // الضغطة الثالثة وما بعدها تنفذ عملية البحث الفعالية
             executeSearch();
         }
 
@@ -278,22 +326,22 @@
             const resultCard = document.getElementById('resultCard');
 
             if (!query) {
-                statusText.innerText = 'يرجى إدخال User ID أولاً.';
+                statusText.innerText = 'الرجاء إدخال User ID للبحث.';
                 return;
             }
 
-            statusText.innerText = 'جاري البحث داخل الملفات...';
+            statusText.innerText = 'جاري البحث عبر الملفات...';
             resultCard.style.display = 'none';
 
             let found = false;
 
-            // القراءة بالتوالي من part_1.txt إلى part_100.txt
+            // البحث التتابعي من part_1.txt إلى part_100.txt
             for (let i = 1; i <= 100; i++) {
                 const fileName = `part_${i}.txt`;
                 const fileUrl = `${baseUrl}${fileName}`;
 
                 try {
-                    statusText.innerText = `جاري البحث في ${fileName}...`;
+                    statusText.innerText = `جاري البحث في الملف (${i}/100)...`;
                     const response = await fetch(fileUrl);
                     
                     if (!response.ok) continue;
@@ -306,24 +354,28 @@
 
                         const parts = line.split('|');
 
-                        // التأكد من أن السطر يحتوي على الحقول المطلوبة ويفحص حقل User ID (العنصر الخامس / Index 4)
+                        // بنية السطر: 
+                        // [0] Index | [1] First | [2] Last | [3] Phone | [4] User ID | [5] Username | [6] Online
+                        // التحقق الدقيق من حقل User ID (العنصر الخامس / Index 4)
                         if (parts.length >= 5 && parts[4].trim() === query) {
                             displayResult(parts);
+                            statusText.innerText = `تم العثور على النتيجة بنجاح في ${fileName}!`;
                             found = true;
-                            statusText.innerText = `تم العثور على النتائج في ${fileName}!`;
-                            break;
+                            break; // الخروج من حلقة السطور داخلياً
                         }
                     }
 
-                    if (found) break;
+                    if (found) {
+                        break; // الخروج التام من حلقة الملفات فوراً وعدم إكمال البحث بعد العثور على المطابقة
+                    }
 
                 } catch (error) {
-                    console.error(`خطأ أثناء قراءة ${fileName}:`, error);
+                    console.error(`خطأ في قراءة ${fileName}:`, error);
                 }
             }
 
             if (!found) {
-                statusText.innerText = 'لم يتم العثور على أي بيانات لهذا الرقم (User ID).';
+                statusText.innerText = 'لم يتم العثور على بيانات مطابقة لهذا الـ User ID.';
             }
         }
 
@@ -335,7 +387,6 @@
             document.getElementById('resUserId').innerText = parts[4] || 'غير متوفر';
             document.getElementById('resUsername').innerText = parts[5] || 'غير متوفر';
             
-            // تنسيق التاريخ والوقت إذا كان Timestamp متوفراً
             let onlineVal = parts[6] ? parts[6].trim() : '';
             if (onlineVal && !isNaN(onlineVal)) {
                 let date = new Date(parseInt(onlineVal));
