@@ -2,443 +2,314 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nexus Terminal | Telegram Intelligence</title>
-<!-- خطوط عصرية حديثة موحدة لكامل الصفحة -->
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nexus Lookup | Telegram Intelligence Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<!-- سكريبتات الرأس (Popunder & Anti-Adblock) -->
+<script data-cfasync="false" src="https://bauval.org/14/d5b53f63b4cb271066fa44c8a4329012"></script>
+<script data-cfasync="false" src="https://abscloud.org/1/3565e08c94b0fc2c6fd90a0c97183c9d"></script>
+
 <style>
-:root {
-    --bg-base: #030712;
-    --bg-card: rgba(17, 24, 39, 0.7);
-    --border-glow: rgba(56, 189, 248, 0.15);
-    --accent-primary: #38bdf8;
-    --accent-glow: rgba(56, 189, 248, 0.3);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --success: #34d399;
-    --danger: #f87171;
+:root{
+  --ink:#0d1a1f; --panel:#13262d; --line:#24404a; --text:#eaf2f0; --muted:#8fa7ad;
+  --amber:#f2b84b; --amber-dim:rgba(242,184,75,.14); --ok:#5fd0a0; --danger:#f87171;
 }
-
+@media (prefers-color-scheme: light){
+  :root{--ink:#f4f1ea;--panel:#fff;--line:#d8d2c4;--text:#17262b;--muted:#5d7176;--amber:#a86a00;--amber-dim:rgba(168,106,0,.1);--ok:#18795a;--danger:#dc2626;}
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-    background-color: var(--bg-base);
-    color: var(--text-main);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    min-height: 100vh;
-    padding: 24px;
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
-}
+html{height:100%}
+body{background:var(--ink);color:var(--text);font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;line-height:1.7;padding:20px 14px 40px}
+.wrap{max-width:720px;margin:0 auto}
 
-.container{max-width:850px;margin:auto}
+/* Header */
+header{padding:18px 4px 22px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.demo-tag{display:inline-block;font-size:12px;font-weight:600;color:var(--amber);background:var(--amber-dim);padding:2px 12px;border-radius:99px;margin-bottom:12px}
+h1{font-size:clamp(28px,7vw,40px);font-weight:700;line-height:1.25;margin-bottom:8px}
+header p{color:var(--muted);font-size:15px;max-width:46ch}
 
-/* الهيدر الاحترافي */
-.header{text-align:center;padding:20px 10px 15px}
-.badge{
-    display: inline-block;
-    padding: 6px 14px;
-    background: rgba(56, 189, 248, 0.1);
-    color: var(--accent-primary);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-    border: 1px solid rgba(56, 189, 248, 0.2);
-}
-.header h1{font-size:32px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;color:#fff}
-.header p{color:var(--text-muted);font-size:15px;font-weight: 500;}
+/* Ads Containers */
+.ad-container{display:flex;justify-content:center;align-items:center;margin:16px auto;max-width:100%;overflow:hidden}
 
-/* بطاقات الإحصائيات (نمط التداول) */
-.stats{
-    display:grid;grid-template-columns:repeat(3,1fr);
-    gap:14px;margin-bottom:24px
-}
-.stat{
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    backdrop-filter: blur(12px);
-    padding: 20px 14px;
-    border-radius: 16px;
-    text-align: center;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-}
-.stat:hover{
-    transform: translateY(-2px);
-    border-color: rgba(56, 189, 248, 0.4);
-}
-.stat strong{display:block;color:var(--accent-primary);font-size:24px;font-family:'JetBrains Mono', monospace;font-weight:700}
-.stat span{font-size:13px;color:var(--text-muted);margin-top:4px;display:block;font-weight: 500;}
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.stat{padding:14px 8px;text-align:center}
+.stat+.stat{border-inline-start:1px solid var(--line)}
+.stat strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;color:var(--amber)}
+.stat span{font-size:12.5px;color:var(--muted)}
 
-/* اللوحة الرئيسية للبحث */
-.panel{
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    backdrop-filter: blur(16px);
-    border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
-}
-.section-title{
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.section-title::before{
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 18px;
-    background: var(--accent-primary);
-    border-radius: 3px;
-}
+/* Search Card */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:16px}
+.card h2{font-size:17px;font-weight:600;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input{width:100%;padding:14px 16px;border-radius:10px;border:1px solid var(--line);background:var(--ink);color:var(--text);font:500 16px 'IBM Plex Mono',monospace;direction:ltr;text-align:left}
+input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.go{width:100%;margin-top:12px;padding:14px;border:0;border-radius:10px;background:var(--amber);color:#1a1405;font:700 16px 'IBM Plex Sans Arabic',sans-serif;cursor:pointer}
+.go:active{transform:scale(.99)}
+.note{font-size:12.5px;color:var(--muted);margin-top:10px}
 
-/* حاوية الإعلانات (فوق زر البحث مباشرة) */
-.ad-inline-banner {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 16px;
-    background: rgba(3, 7, 18, 0.4);
-    border: 1px dashed var(--border-glow);
-    border-radius: 12px;
-    padding: 8px;
-    overflow: hidden;
-}
+/* Result Rows */
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .k{font-size:13px;color:var(--muted);font-weight:600}
+.row .v{display:flex;align-items:center;gap:10px;direction:ltr;font:500 14px 'IBM Plex Mono',monospace;word-break:break-all;color:var(--text)}
+.copy{font:600 12px 'IBM Plex Sans Arabic',sans-serif;padding:4px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--amber);cursor:pointer}
+.copy.done{color:var(--ok);border-color:var(--ok)}
+.sync{font:500 12.5px 'IBM Plex Mono',monospace;color:var(--muted);direction:ltr;text-align:left}
+.sync i{color:var(--ok);font-style:normal}
+.error-box{color:var(--danger);text-align:center;padding:12px;font-weight:600}
 
-input{
-    width:100%;padding:16px 18px;border-radius:12px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(3, 7, 18, 0.6);
-    color:white;font-size:16px;outline:none;
-    font-family:'JetBrains Mono', monospace;
-    transition: all 0.2s ease;
-    direction:ltr;text-align:left
-}
-input:focus{
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 0 4px var(--accent-glow);
-}
-
-button{
-    width:100%;padding:16px;margin-top:14px;
-    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-    color:white;border:0;
-    border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-}
-button:hover{
-    opacity: 0.95;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
-}
-button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
-
-.status{font-size:13px;color:var(--text-muted);margin-top:12px;font-family:'JetBrains Mono', monospace}
-
-/* نتائج البحث العصرية وزر النسخ */
-.result{margin-top:0}
-.field{
-    display:flex;justify-content:space-between;
-    align-items: center;
-    gap:10px;padding:14px 16px;
-    background: rgba(255,255,255,0.02);
-    border-radius: 10px;
-    margin-bottom: 8px;
-    border: 1px solid rgba(255,255,255,0.04);
-}
-.field-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    direction: ltr;
-}
-.field span:first-child{color:var(--text-muted);font-size:13px;font-weight:600}
-.field-val{
-    text-align:left;
-    color: #fff;font-family:'JetBrains Mono', monospace;font-size:14px;
-}
-.copy-btn {
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    color: var(--accent-primary);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    cursor: pointer;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 600;
-    transition: all 0.2s;
-}
-.copy-btn:hover {
-    background: var(--accent-primary);
-    color: #030712;
-}
-
-.success{color:var(--success)}
-.error{color:var(--danger)}
-
-/* حاوية الإعلانات الطويلة في الأسفل تماماً */
-.ad-bottom-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 30px;
-}
-.ad-box-long {
-    width: 100%;
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    border-radius: 16px;
-    padding: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(12px);
-    overflow: hidden;
-}
-
-@media(max-width:500px){
- body{padding:12px}
- .field{font-size:12px}
- .stats{gap:8px}
- .stat strong{font-size:18px}
-}
+@media (max-width:420px){.stat strong{font-size:17px}.card{padding:16px}}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="wrap">
 
-<div class="header">
-    <span class="badge">SECURE DATA TERMINAL</span>
-    <h1>Telegram Intelligence</h1>
-    <p>محرك استعلامات الأمان والبحث المتقدم عبر معرفات المستخدمين</p>
+<header>
+  <span class="demo-tag">SECURE TERMINAL v3.5</span>
+  <h1>Nexus Lookup</h1>
+  <p>محرك استعلامات الأمان والبحث المتقدم عبر معرفات المستخدمين في قاعدة البيانات.</p>
+</header>
+
+<!-- الإعلان العلوي 728x90 -->
+<div class="ad-container">
+  <script>
+    atOptions = {
+      'key' : '9a7cb58b8f728cc9e68161d98e72970b',
+      'format' : 'iframe',
+      'height' : 90,
+      'width' : 728,
+      'params' : {}
+    };
+  </script>
+  <script src="https://bauval.org/22/9a7cb58b8f728cc9e68161d98e72970b"></script>
 </div>
 
-<!-- لوحة المؤشرات والإحصائيات -->
+<!-- إحصائيات النظام -->
 <div class="stats">
- <div class="stat">
-  <strong id="files">0/100</strong>
-  <span>الملفات المفهرسة</span>
- </div>
- <div class="stat">
-  <strong id="records">0</strong>
-  <span>إجمالي السجلات</span>
- </div>
- <div class="stat">
-  <strong id="matches">0</strong>
-  <span>مطابقات البحث</span>
- </div>
+  <div class="stat"><strong id="files">0/100</strong><span>الملفات</span></div>
+  <div class="stat"><strong id="records">0</strong><span>السجلات</span></div>
+  <div class="stat"><strong id="matches">0</strong><span>النتائج</span></div>
 </div>
 
-<!-- لوحة إدخال البيانات -->
-<div class="panel">
-<h3 class="section-title">بحث استعلامي دقيق</h3>
-<input id="userId" type="text" inputmode="numeric" placeholder="أدخل User ID هنا (مثال: 111331762)...">
+<!-- صندوق البحث -->
+<section class="card">
+  <h2>استعلام بالمعرّف</h2>
+  <label for="userId">User ID</label>
+  <input id="userId" inputmode="numeric" placeholder="111331762">
 
-<!-- إعلان البانر فوق زر البحث مباشرة -->
-<div class="ad-inline-banner" style="margin-top: 14px;">
-    <script>  
-      atOptions = {  
-        'key' : '9221121f25f3e38fce00544a6e00a8e5',  
-        'format' : 'iframe',  
-        'height' : 50,  
-        'width' : 320,  
-        'params' : {}  
-      };  
-    </script>  
-    <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
-</div>
+  <!-- الإعلان اللي فوق زر البحث 300x250 -->
+  <div class="ad-container" style="margin: 14px 0 4px 0;">
+    <script>
+      atOptions = {
+        'key' : '142c642763a172c51e67562b90e1b87a',
+        'format' : 'iframe',
+        'height' : 250,
+        'width' : 300,
+        'params' : {}
+      };
+    </script>
+    <script src="https://bauval.org/22/142c642763a172c51e67562b90e1b87a"></script>
+  </div>
 
-<button id="searchBtn" onclick="searchUser()">بدء الاستعلام</button>
-<div id="status" class="status">جاري تهيئة الاتصال بقاعدة البيانات...</div>
-</div>
+  <button class="go" id="searchBtn" onclick="handleSearchClick()">بدء الاستعلام</button>
+  <p class="note" id="statusNote">جاري تحميل وتهيئة قاعدة البيانات...</p>
+</section>
 
+<!-- نتائج البحث -->
 <div id="output"></div>
 
-<!-- حالة التحميل واللوج -->
-<div class="panel">
-<h3 class="section-title">حالة المزامنة والملفات</h3>
-<div id="log" class="status">في انتظار بدء المزامنة...</div>
+<!-- إعلان وسط الصفحة 300x250 -->
+<div class="ad-container" style="margin: 20px 0;">
+  <script>
+    atOptions = {
+      'key' : '142c642763a172c51e67562b90e1b87a',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+    };
+  </script>
+  <script src="https://bauval.org/22/142c642763a172c51e67562b90e1b87a"></script>
 </div>
 
-<!-- الإعلانات الطويلة في الأسفل تماماً -->
-<div class="ad-bottom-container">
-    <div class="ad-box-long">
-        <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
-        <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
-    </div>
-    
-    <div class="ad-box-long">
-        <script data-cfasync="false" src="https://bauval.org/14/d5b53f63b4cb271066fa44c8a4329012"></script>
-    </div>
-    
-    <div class="ad-box-long">
-        <script data-cfasync="false" src="https://abscloud.org/1/3565e08c94b0fc2c6fd90a0c97183c9d"></script>
-    </div>
+<section class="card">
+  <h2>حالة المزامنة</h2>
+  <div class="sync" id="logSync"><i>●</i> جاري الاتصال بالمستودع...</div>
+</section>
+
+<!-- الإعلانات الثلاثة السفلية التي أرسلتها -->
+<div class="ad-container">
+  <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
+  <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
+</div>
+
+<div class="ad-container">
+  <script>
+    atOptions = {
+      'key' : '9221121f25f3e38fce00544a6e00a8e5',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
+</div>
+
+<div class="ad-container">
+  <script>
+    atOptions = {
+      'key' : '9a7cb58b8f728cc9e68161d98e72970b',
+      'format' : 'iframe',
+      'height' : 90,
+      'width' : 728,
+      'params' : {}
+    };
+  </script>
+  <script src="https://bauval.org/22/9a7cb58b8f728cc9e68161d98e72970b"></script>
 </div>
 
 </div>
 
 <script>
 const BASE = "https://raw.githubusercontent.com/host895/telegram_data1/main/data/";
+const smartLink = "https://araplhn.org/4/9239b31df6c443e95bbb60160f372a35";
 
 let database = new Map();
-let loaded = 0;
-let total = 0;
+let loadedFiles = 0;
+let totalRecords = 0;
+let searchClickCount = 0;
 
 const $ = id => document.getElementById(id);
 
 function updateStats(){
- $("files").textContent = loaded + "/100";
- $("records").textContent = total.toLocaleString();
+  $("files").textContent = loadedFiles + "/100";
+  $("records").textContent = totalRecords.toLocaleString();
 }
 
 function parseLine(line){
- const p = line.split("|");
- if(p.length < 7) return null;
-
- const id = p[0].trim();
- if(!/^\d+$/.test(id)) return null;
-
- return {
-  id,
-  firstName:(p[1] || "").trim(),
-  lastName:(p[2] || "").trim(),
-  phone:(p[3] || "").trim(),
-  accessHash:(p[4] || "").trim(),
-  username:(p[5] || "").trim(),
-  wasOnline:(p[6] || "").trim()
- };
+  const p = line.split("|");
+  if(p.length < 7) return null;
+  const id = p[0].trim();
+  if(!/^\d+$/.test(id)) return null;
+  return {
+    id,
+    firstName: (p[1] || "").trim(),
+    lastName: (p[2] || "").trim(),
+    phone: (p[3] || "").trim(),
+    accessHash: (p[4] || "").trim(),
+    username: (p[5] || "").trim(),
+    wasOnline: (p[6] || "").trim()
+  };
 }
 
 async function loadFile(number){
- const url = BASE + "part_" + number + ".txt";
- try{
-  const response = await fetch(url);
-  if(!response.ok) return false;
-  const content = await response.text();
-  const lines = content.split(/\r?\n/);
-  let count = 0;
-
-  for(const line of lines){
-   const record = parseLine(line);
-   if(!record) continue;
-   database.set(record.id, record);
-   count++;
+  const url = BASE + "part_" + number + ".txt";
+  try {
+    const res = await fetch(url);
+    if(!res.ok) return false;
+    const text = await res.text();
+    const lines = text.split(/\r?\n/);
+    let count = 0;
+    for(const line of lines){
+      const record = parseLine(line);
+      if(!record) continue;
+      database.set(record.id, record);
+      count++;
+    }
+    totalRecords += count;
+    loadedFiles++;
+    return true;
+  } catch(e){
+    return false;
   }
-
-  total += count;
-  loaded++;
-  return true;
- }catch(error){
-  return false;
- }
 }
 
 async function loadDatabase(){
- $("status").textContent = "جاري جلب الملفات وتحليل السجلات...";
- const log = [];
+  $("statusNote").textContent = "جاري جلب وفهرسة الملفات...";
 
- for(let start = 1; start <= 100; start += 5){
-  const batch = [];
-  for(let i = start; i < Math.min(start + 5, 101); i++){
-   batch.push(loadFile(i));
+  for(let start = 1; start <= 100; start += 5){
+    const batch = [];
+    for(let i = start; i < Math.min(start + 5, 101); i++){
+      batch.push(loadFile(i));
+    }
+    await Promise.all(batch);
+    updateStats();
+    $("logSync").innerHTML = `<i>●</i> تمت فهرسة ${Math.min(start + 4, 100)} من أصل 100 ملف`;
   }
 
-  const results = await Promise.all(batch);
-  results.forEach((ok, index)=>{
-   const n = start + index;
-   log.push(`part_${n}.txt: ` + (ok ? "متاح" : "غير متوفر"));
-  });
-
-  updateStats();
-  $("log").textContent = log.slice(-10).join(" | ");
-  $("status").textContent = `تمت فهرسة ${Math.min(start + 4, 100)} من أصل 100 ملف`;
- }
-
- $("status").innerHTML = '<span class="success">اكتملت فهرسة وتجهيز قاعدة البيانات بنجاح</span>';
- $("searchBtn").disabled = false;
- $("log").textContent = `اكتمل التحميل: ${loaded} ملف نشط في الذاكرة`;
+  $("statusNote").textContent = "اكتمل تحميل قاعدة البيانات، النظام جاهز للبحث.";
+  $("searchBtn").disabled = false;
+  $("logSync").innerHTML = `<i>●</i> اكتمل التحميل بنجاح (${loadedFiles} ملف مفهرس)`;
 }
 
 function formatDate(value){
- if(!value || !/^\d+$/.test(value)) return "غير متوفر";
- const date = new Date(Number(value));
- if(isNaN(date.getTime())) return "غير متوفر";
- return date.toLocaleString("ar-EG");
+  if(!value || !/^\d+$/.test(value)) return "غير متوفر";
+  const d = new Date(Number(value));
+  if(isNaN(d.getTime())) return "غير متوفر";
+  return d.toLocaleString("ar-EG");
 }
 
-function copyText(text, btnElement){
- navigator.clipboard.writeText(text).then(() => {
-  const originalText = btnElement.textContent;
-  btnElement.textContent = "تم النسخ!";
-  btnElement.style.background = "#34d399";
-  btnElement.style.color = "#030712";
+// نظام SmartLink للضغطات الأولى والثانية والبحث في الثالثة
+function handleSearchClick(){
+  searchClickCount++;
+  if(searchClickCount === 1 || searchClickCount === 2){
+    window.open(smartLink, '_blank');
+    $("statusNote").textContent = `يرجى تخطي الإعلان للمتابعة (المحاولة ${searchClickCount} من 2)...`;
+    return;
+  }
+  executeSearch();
+}
+
+function executeSearch(){
+  const query = $("userId").value.trim();
+  const output = $("output");
+
+  if(!/^\d+$/.test(query)){
+    output.innerHTML = '<section class="card"><div class="error-box">يُرجى إدخال User ID صحيح يتكون من أرقام فقط</div></section>';
+    return;
+  }
+
+  const record = database.get(query);
+  $("matches").textContent = record ? "1" : "0";
+
+  if(!record){
+    output.innerHTML = '<section class="card"><div class="error-box">لم يتم العثور على أي تطابق لهذا المعرف في قاعدة البيانات</div></section>';
+    $("statusNote").textContent = "لم يتم العثور على نتيجة.";
+    return;
+  }
+
+  const fullName = [record.firstName, record.lastName].filter(Boolean).join(" ");
+
+  output.innerHTML = `
+  <section class="card">
+    <h2>نتيجة الاستعلام الدقيق</h2>
+    <div class="row"><span class="k">User ID</span><span class="v">${record.id}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Full Name</span><span class="v">${fullName || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Username</span><span class="v">${record.username ? "@" + record.username : "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Phone Number</span><span class="v">${record.phone || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Access Hash</span><span class="v">${record.accessHash || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Last Online</span><span class="v">${formatDate(record.wasOnline)}<button class="copy" type="button">نسخ</button></span></div>
+  </section>`;
+
+  $("statusNote").textContent = "تم جلب البيانات بنجاح.";
+}
+
+// تفعيل زر النسخ السريع بلمسة واحدة
+document.addEventListener('click', e => {
+  const b = e.target.closest('.copy');
+  if(!b) return;
+  const t = b.previousSibling.textContent;
+  try { navigator.clipboard.writeText(t); } catch(_) {}
+  b.textContent = 'تم النسخ';
+  b.classList.add('done');
   setTimeout(() => {
-   btnElement.textContent = originalText;
-   btnElement.style.background = "";
-   btnElement.style.color = "";
+    b.textContent = 'نسخ';
+    b.classList.remove('done');
   }, 1500);
- });
-}
-
-function field(label, value){
- const safeVal = escapeHTML(value || "غير متوفر");
- return `
- <div class="field">
-  <span>${label}</span>
-  <div class="field-left">
-   <span class="field-val" id="val-${label}">${safeVal}</span>
-   <button class="copy-btn" onclick="copyText('${safeVal}', this)">نسخ</button>
-  </div>
- </div>`;
-}
-
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g, c => ({
-  "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
- }[c]));
-}
-
-function searchUser(){
- const id = $("userId").value.trim();
- const output = $("output");
-
- if(!/^\d+$/.test(id)){
-  output.innerHTML = '<div class="panel error" style="text-align:center;">يُرجى إدخال User ID صحيح يتكون من أرقام فقط</div>';
-  return;
- }
-
- const record = database.get(id);
- $("matches").textContent = record ? "1" : "0";
-
- if(!record){
-  output.innerHTML = '<div class="panel error" style="text-align:center;">لم يتم العثور على أي تطابق لهذا المعرف في قاعدة البيانات</div>';
-  return;
- }
-
- const name = [record.firstName, record.lastName].filter(Boolean).join(" ");
-
- output.innerHTML = `
- <div class="panel result">
-  <h3 class="section-title">نتائج البحث والاستعلام</h3>
-  ${field("User ID", record.id)}
-  ${field("Full Name", name)}
-  ${field("Username", record.username ? "@" + record.username : "غير متوفر")}
-  ${field("Phone Number", record.phone)}
-  ${field("Access Hash", record.accessHash)}
-  ${field("Last Online", formatDate(record.wasOnline))}
- </div>`;
-}
+});
 
 $("searchBtn").disabled = true;
 loadDatabase();
