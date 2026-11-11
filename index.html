@@ -69,7 +69,7 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
 <header>
   <span class="demo-tag">SECURE TERMINAL v3.5</span>
   <h1>Nexus Lookup</h1>
-  <p>محرك استعلامات الأمان والبحث المتقدم عبر معرفات المستخدمين في قاعدة البيانات.</p>
+  <p>محرك استعلامات الأمان والبحث المتقدم عبر المعرفات أو أسماء المستخدمين في قاعدة البيانات.</p>
 </header>
 
 <!-- الإعلان العلوي 728x90 -->
@@ -95,9 +95,9 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
 
 <!-- صندوق البحث -->
 <section class="card">
-  <h2>استعلام بالمعرّف</h2>
-  <label for="userId">User ID</label>
-  <input id="userId" inputmode="numeric" placeholder="111331762">
+  <h2>استعلام بالمعرّف أو اسم المستخدم</h2>
+  <label for="searchInput">User ID أو Username</label>
+  <input id="searchInput" placeholder="أدخل ID أو Username (مثال: 111331762 أو username)">
 
   <!-- الإعلان اللي فوق زر البحث 300x250 -->
   <div class="ad-container" style="margin: 14px 0 4px 0;">
@@ -139,7 +139,7 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
   <div class="sync" id="logSync"><i>●</i> جاري الاتصال بالمستودع...</div>
 </section>
 
-<!-- الإعلانات الثلاثة السفلية التي أرسلتها -->
+<!-- الإعلانات الثلاثة السفلية -->
 <div class="ad-container">
   <script async="async" data-cfasync="false" src="https://bauval.org/21/092715ad1141e35df7097d05dd0e7368"></script>  
   <div id="container-092715ad1141e35df7097d05dd0e7368"></div>
@@ -177,7 +177,8 @@ input:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-
 const BASE = "https://raw.githubusercontent.com/host895/telegram_data1/main/data/";
 const smartLink = "https://araplhn.org/4/9239b31df6c443e95bbb60160f372a35";
 
-let database = new Map();
+let databaseById = new Map();
+let databaseByUsername = new Map();
 let loadedFiles = 0;
 let totalRecords = 0;
 let searchClickCount = 0;
@@ -200,7 +201,8 @@ function parseLine(line){
     lastName: (p[2] || "").trim(),
     phone: (p[3] || "").trim(),
     accessHash: (p[4] || "").trim(),
-    username: (p[5] || "").trim(),
+    username: (p[5] || "").trim().toLowerCase(),
+    originalUsername: (p[5] || "").trim(),
     wasOnline: (p[6] || "").trim()
   };
 }
@@ -216,7 +218,10 @@ async function loadFile(number){
     for(const line of lines){
       const record = parseLine(line);
       if(!record) continue;
-      database.set(record.id, record);
+      databaseById.set(record.id, record);
+      if(record.username){
+        databaseByUsername.set(record.username, record);
+      }
       count++;
     }
     totalRecords += count;
@@ -264,32 +269,51 @@ function handleSearchClick(){
 }
 
 function executeSearch(){
-  const query = $("userId").value.trim();
+  let query = $("searchInput").value.trim();
   const output = $("output");
 
-  if(!/^\d+$/.test(query)){
-    output.innerHTML = '<section class="card"><div class="error-box">يُرجى إدخال User ID صحيح يتكون من أرقام فقط</div></section>';
+  if(!query){
+    output.innerHTML = '<section class="card"><div class="error-box">يُرجى إدخال User ID أو Username للبحث</div></section>';
     return;
   }
 
-  const record = database.get(query);
+  // إزالة علامة @ لو كتبها المستخدم في البداية لكي يبحث بشكل صحيح
+  if(query.startsWith('@')){
+    query = query.substring(1);
+  }
+
+  let record = null;
+
+  // البحث إما بالـ ID (لو كلها أرقام) أو بالـ Username
+  if(/^\d+$/.test(query)){
+    record = databaseById.get(query);
+  } else {
+    record = databaseByUsername.get(query.toLowerCase());
+  }
+
   $("matches").textContent = record ? "1" : "0";
 
   if(!record){
-    output.innerHTML = '<section class="card"><div class="error-box">لم يتم العثور على أي تطابق لهذا المعرف في قاعدة البيانات</div></section>';
+    output.innerHTML = '<section class="card"><div class="error-box">لم يتم العثور على أي تطابق لهذا المعرف أو اسم المستخدم</div></section>';
     $("statusNote").textContent = "لم يتم العثور على نتيجة.";
     return;
   }
 
   const fullName = [record.firstName, record.lastName].filter(Boolean).join(" ");
+  
+  // تنسيق رقم الهاتف بحيث يبدأ بعلامة (+) إذا لم تكن موجودة ورقم موجود
+  let formattedPhone = "غير متوفر";
+  if(record.phone){
+    formattedPhone = record.phone.startsWith('+') ? record.phone : '+' + record.phone;
+  }
 
   output.innerHTML = `
   <section class="card">
     <h2>نتيجة الاستعلام الدقيق</h2>
     <div class="row"><span class="k">User ID</span><span class="v">${record.id}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Full Name</span><span class="v">${fullName || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
-    <div class="row"><span class="k">Username</span><span class="v">${record.username ? "@" + record.username : "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
-    <div class="row"><span class="k">Phone Number</span><span class="v">${record.phone ? (record.phone.startsWith('+') ? record.phone : '+' + record.phone) : "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Username</span><span class="v">${record.originalUsername ? "@" + record.originalUsername : "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
+    <div class="row"><span class="k">Phone Number</span><span class="v">${formattedPhone}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Access Hash</span><span class="v">${record.accessHash || "غير متوفر"}<button class="copy" type="button">نسخ</button></span></div>
     <div class="row"><span class="k">Last Online</span><span class="v">${formatDate(record.wasOnline)}<button class="copy" type="button">نسخ</button></span></div>
   </section>`;
