@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nexus Terminal | Telegram Intelligence</title>
-<!-- خطوط عصرية حديثة -->
+<!-- خطوط عصرية حديثة موحدة لكامل الصفحة -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -34,7 +34,7 @@ body{
 .container{max-width:850px;margin:auto}
 
 /* الهيدر الاحترافي */
-.header{text-align:center;padding:30px 10px 20px}
+.header{text-align:center;padding:20px 10px 15px}
 .badge{
     display: inline-block;
     padding: 6px 14px;
@@ -48,22 +48,7 @@ body{
     border: 1px solid rgba(56, 189, 248, 0.2);
 }
 .header h1{font-size:32px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;color:#fff}
-.header p{color:var(--text-muted);font-size:15px}
-
-/* إعلانات البانر العلوية */
-.ad-top-banner {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 24px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    border-radius: 14px;
-    padding: 10px;
-    backdrop-filter: blur(12px);
-    overflow: hidden;
-}
+.header p{color:var(--text-muted);font-size:15px;font-weight: 500;}
 
 /* بطاقات الإحصائيات (نمط التداول) */
 .stats{
@@ -84,7 +69,7 @@ body{
     border-color: rgba(56, 189, 248, 0.4);
 }
 .stat strong{display:block;color:var(--accent-primary);font-size:24px;font-family:'JetBrains Mono', monospace;font-weight:700}
-.stat span{font-size:13px;color:var(--text-muted);margin-top:4px;display:block}
+.stat span{font-size:13px;color:var(--text-muted);margin-top:4px;display:block;font-weight: 500;}
 
 /* اللوحة الرئيسية للبحث */
 .panel{
@@ -112,6 +97,20 @@ body{
     height: 18px;
     background: var(--accent-primary);
     border-radius: 3px;
+}
+
+/* حاوية الإعلانات (فوق زر البحث مباشرة) */
+.ad-inline-banner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    background: rgba(3, 7, 18, 0.4);
+    border: 1px dashed var(--border-glow);
+    border-radius: 12px;
+    padding: 8px;
+    overflow: hidden;
 }
 
 input{
@@ -145,7 +144,7 @@ button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 
 .status{font-size:13px;color:var(--text-muted);margin-top:12px;font-family:'JetBrains Mono', monospace}
 
-/* نتائج البحث العصرية */
+/* نتائج البحث العصرية وزر النسخ */
 .result{margin-top:0}
 .field{
     display:flex;justify-content:space-between;
@@ -156,16 +155,38 @@ button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
     margin-bottom: 8px;
     border: 1px solid rgba(255,255,255,0.04);
 }
+.field-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    direction: ltr;
+}
 .field span:first-child{color:var(--text-muted);font-size:13px;font-weight:600}
-.field span:last-child{
-    text-align:left;direction:ltr;overflow-wrap:anywhere;
+.field-val{
+    text-align:left;
     color: #fff;font-family:'JetBrains Mono', monospace;font-size:14px;
+}
+.copy-btn {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    color: var(--accent-primary);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.copy-btn:hover {
+    background: var(--accent-primary);
+    color: #030712;
 }
 
 .success{color:var(--success)}
 .error{color:var(--danger)}
 
-/* حاوية الإعلانات الطويلة في الأسفل */
+/* حاوية الإعلانات الطويلة في الأسفل تماماً */
 .ad-bottom-container {
     display: flex;
     flex-direction: column;
@@ -196,20 +217,6 @@ button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 <body>
 <div class="container">
 
-<!-- إعلان البانر العلوي -->
-<div class="ad-top-banner">
-    <script>  
-      atOptions = {  
-        'key' : '9221121f25f3e38fce00544a6e00a8e5',  
-        'format' : 'iframe',  
-        'height' : 50,  
-        'width' : 320,  
-        'params' : {}  
-      };  
-    </script>  
-    <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
-</div>
-
 <div class="header">
     <span class="badge">SECURE DATA TERMINAL</span>
     <h1>Telegram Intelligence</h1>
@@ -236,6 +243,20 @@ button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 <div class="panel">
 <h3 class="section-title">بحث استعلامي دقيق</h3>
 <input id="userId" type="text" inputmode="numeric" placeholder="أدخل User ID هنا (مثال: 111331762)...">
+
+<!-- إعلان البانر فوق زر البحث مباشرة -->
+<div class="ad-inline-banner" style="margin-top: 14px;">
+    <script>  
+      atOptions = {  
+        'key' : '9221121f25f3e38fce00544a6e00a8e5',  
+        'format' : 'iframe',  
+        'height' : 50,  
+        'width' : 320,  
+        'params' : {}  
+      };  
+    </script>  
+    <script src="https://bauval.org/22/9221121f25f3e38fce00544a6e00a8e5"></script>
+</div>
 
 <button id="searchBtn" onclick="searchUser()">بدء الاستعلام</button>
 <div id="status" class="status">جاري تهيئة الاتصال بقاعدة البيانات...</div>
@@ -356,11 +377,29 @@ function formatDate(value){
  return date.toLocaleString("ar-EG");
 }
 
+function copyText(text, btnElement){
+ navigator.clipboard.writeText(text).then(() => {
+  const originalText = btnElement.textContent;
+  btnElement.textContent = "تم النسخ!";
+  btnElement.style.background = "#34d399";
+  btnElement.style.color = "#030712";
+  setTimeout(() => {
+   btnElement.textContent = originalText;
+   btnElement.style.background = "";
+   btnElement.style.color = "";
+  }, 1500);
+ });
+}
+
 function field(label, value){
+ const safeVal = escapeHTML(value || "غير متوفر");
  return `
  <div class="field">
   <span>${label}</span>
-  <span>${escapeHTML(value || "غير متوفر")}</span>
+  <div class="field-left">
+   <span class="field-val" id="val-${label}">${safeVal}</span>
+   <button class="copy-btn" onclick="copyText('${safeVal}', this)">نسخ</button>
+  </div>
  </div>`;
 }
 
