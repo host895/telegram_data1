@@ -2,15 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nexus Telegram API</title>
 <style>
   body { background: #ffffff; color: #111111; font-family: monospace; padding: 20px; word-break: break-all; }
   pre { white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+  .ad-notice { background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-family: 'IBM Plex Sans Arabic', sans-serif; }
 </style>
 </head>
 <body>
 
-<pre id="jsonOutput">جاري التحقق من حالة الاتصال ومعالجة الطلب...</pre>
+<div id="noticeContainer"></div>
+<pre id="jsonOutput">جاري معالجة طلب الـ API...</pre>
 
 <script>
 const BASE = "https://raw.githubusercontent.com/host895/telegram_data1/main/data/";
@@ -18,24 +21,38 @@ const smartLink = "https://araplhn.org/4/9239b31df6c443e95bbb60160f372a35";
 
 let database = new Map();
 
-// قراءة الـ Parameters من الرابط (id أو user)
+// قراءة المعرف المطلوب من الرابط (?id=... أو ?user=...)
 const urlParams = new URLSearchParams(window.location.search);
 const targetId = urlParams.get('id');
 const targetUser = urlParams.get('user');
 
-// نظام عداد الطلبات عبر الـ LocalStorage لكل مستخدم/متصفح
-let visitCount = parseInt(localStorage.getItem('api_visit_count') || '0') + 1;
-localStorage.setItem('api_visit_count', visitCount);
-
-// التحقق من تفعيل الـ Smartlink في أول مرتين، وفي الثالثة وما بعدها يستخرج البيانات
-if (visitCount === 1 || visitCount === 2) {
-    document.getElementById('jsonOutput').textContent = "جاري توجيهك لصفحة التحقق الإعلانية (المحاولة " + visitCount + " من 2)...";
-    setTimeout(() => {
-        window.location.href = smartLink;
-    }, 1000);
+if (!targetId && !targetUser) {
+    document.getElementById('jsonOutput').textContent = JSON.stringify({
+        status: false,
+        error: "Please provide ?id= or ?user= parameter"
+    }, null, 2);
 } else {
-    // المحاولة الثالثة فما فوق: تحميل الملفات واستخراج البيانات وعرضها بصيغة JSON على صفحة بيضاء
-    initAndSearch();
+    // إنشاء مفتاح فريد لكل شخص يتم البحث عنه في التخزين المحلي للمستخدم
+    const searchKey = `api_clicks_${targetId || targetUser}`;
+    let currentClicks = parseInt(localStorage.getItem(searchKey) || '0') + 1;
+    localStorage.setItem(searchKey, currentClicks);
+
+    // نظام الإعلانات المتكرر: أول مرتين لكل شخص جديد تفتح إعلان Smartlink
+    if (currentClicks === 1 || currentClicks === 2) {
+        document.getElementById('noticeContainer').innerHTML = `
+            <div class="ad-notice">
+              <strong>تنبيه إعلاني:</strong> هذه هي المحاولة (${currentClicks} من 2) لجلب بيانات هذا المستخدم. جاري تحويلك للإعلان...
+            </div>
+        `;
+        document.getElementById('jsonOutput').textContent = "جاري توجيهك لصفحة الإعلان...";
+        
+        setTimeout(() => {
+            window.location.href = smartLink;
+        }, 1500);
+    } else {
+        // المحاولة الثالثة فما فوق: جلب بيانات الشخص وعرضها كـ JSON صافي
+        initAndSearch(targetId, targetUser);
+    }
 }
 
 function parseLine(line){
@@ -72,19 +89,19 @@ async function loadFile(number){
   }
 }
 
-async function initAndSearch(){
-  document.getElementById('jsonOutput').textContent = "جاري قراءة قاعدة البيانات واستخراج البيانات المطلوبة...";
+async function initAndSearch(uid, uname){
+  document.getElementById('jsonOutput').textContent = "جاري البحث في قاعدة البيانات...";
 
-  // تحميل سريع لعينات الملفات أو الملفات كاملة (يمكنك تسريع العملية أو تحميلها حسب الحاجة)
-  for(let i = 1; i <= 10; i++){ // للتجربة السريعة، أو ارفعها لـ 100 إذا أردت البحث الشامل
+  // تحميل الملفات (يمكنك تعديل عدد الملفات حسب رغبتك أو جعلها تصل إلى 100)
+  for(let i = 1; i <= 20; i++){
     await loadFile(i);
   }
 
   let record = null;
-  if(targetId){
-    record = database.get(targetId);
-  } else if(targetUser){
-    const cleanUser = targetUser.startsWith('@') ? targetUser.substring(1).toLowerCase() : targetUser.toLowerCase();
+  if(uid){
+    record = database.get(uid);
+  } else if(uname){
+    const cleanUser = uname.startsWith('@') ? uname.substring(1).toLowerCase() : uname.toLowerCase();
     for(let [id, rec] of database.entries()){
       if(rec.username === cleanUser){
         record = rec;
@@ -96,7 +113,7 @@ async function initAndSearch(){
   if(!record){
     document.getElementById('jsonOutput').textContent = JSON.stringify({
       status: false,
-      error: "User not found or database still indexing"
+      error: "User not found"
     }, null, 2);
     return;
   }
@@ -115,7 +132,7 @@ async function initAndSearch(){
     }
   };
 
-  // طباعة النتيجة النهائية كـ JSON نقي على الصفحة البيضاء
+  // إظهار كود الـ JSON النقي
   document.getElementById('jsonOutput').textContent = JSON.stringify(responseObj, null, 2);
 }
 </script>
